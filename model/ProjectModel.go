@@ -24,11 +24,7 @@ func (p ProjectModel) TableName() string {
 	return "project"
 }
 
-func GetAllProjects() string {
-	return "testing"
-}
-
-func FindAll() []ProjectModel {
+func FindAllProject() []ProjectModel {
 	db, _ := config.ConnectDB()
 	var data []ProjectModel
 	db.Find(&data)
