@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/dandirahmawan/menej_api_go/model"
 	"github.com/dandirahmawan/menej_api_go/services"
@@ -17,9 +16,8 @@ type ResultModule struct {
 
 func GetModule(ctx *gin.Context) {
 	id := ctx.Param("id")
-	param, _ := strconv.Atoi(id)
 
-	dataModule := services.GetModuleByProjecId(int64(param))
+	dataModule := services.GetModuleByProjecId(id)
 	dataTeam := services.GetProjectTeamByProjectId(ctx)
 	dataLabels := services.GetLabelsByProjectId(ctx)
 

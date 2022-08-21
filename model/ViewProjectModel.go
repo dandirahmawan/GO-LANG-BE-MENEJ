@@ -20,10 +20,10 @@ var RawQueryViewProject string = "SELECT DISTINCT \n" +
 	"WHERE (p.is_delete <> 'Y' OR p.is_delete IS NULL)"
 
 type ViewProjectModel struct {
-	ProjectId   int64  `json:"projectId" gorm:"column:project_id"`
-	Pic         int64  `json:"pic" gorm:"column:pic"`
+	ProjectId   string `json:"projectId" gorm:"column:project_id"`
+	Pic         string `json:"pic" gorm:"column:pic"`
 	ProjectName string `json:"projectName" gorm:"column:project_name"`
-	CreatedBy   int64  `json:"createdBy" gorm:"column:created_by"`
+	CreatedBy   string `json:"createdBy" gorm:"column:created_by"`
 	CreatedDate string `json:"createdDate" gorm:"column:created_date"`
 	IsDelete    string `json:"isDelete" gorm:"column:is_delete"`
 	IsClose     string `json:"isClose" gorm:"column:is_close"`

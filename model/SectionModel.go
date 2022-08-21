@@ -7,8 +7,8 @@ import (
 )
 
 type SectionModel struct {
-	Id        int64        `json:"id" gorm:"primaryKey"`
-	ProjectId int64        `json:"projectId"`
+	Id        string       `json:"id" gorm:"primaryKey"`
+	ProjectId string       `json:"projectId"`
 	Section   string       `json:"section"`
 	Modules   []ViewModule `json:"modules" gorm:"foreignKey:SectionId;references:Id"`
 }
@@ -17,7 +17,7 @@ func (s SectionModel) TableName() string {
 	return "section"
 }
 
-func FindSectionByProjectId(projectId int64) []SectionModel {
+func FindSectionByProjectId(projectId string) []SectionModel {
 	db, _ := config.ConnectDB()
 	var data []SectionModel
 	err := db.Model(&SectionModel{}).

@@ -1,8 +1,8 @@
 package model
 
 type ViewAssignedModule struct {
-	UserId   int64  `json:"userId"`
-	ModuleId int64  `json:"moduleId"`
+	UserId   string `json:"userId"`
+	ModuleId string `json:"moduleId"`
 	UserName string `json:"userName"`
 }
 
