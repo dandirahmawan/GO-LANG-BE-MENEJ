@@ -34,3 +34,7 @@ type ViewProjectModel struct {
 	CountBugs   int16  `json:"countBugs" gorm:"column:count_bugs"`
 	CountModule int32  `json:"countModule" gorm:"column:count_module"`
 }
+
+func (m ViewProjectModel) TableName() string {
+	return "view_project"
+}

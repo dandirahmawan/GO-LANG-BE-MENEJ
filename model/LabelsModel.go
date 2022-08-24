@@ -7,7 +7,7 @@ import (
 )
 
 type LabelsModel struct {
-	ProjectId int64     `json:"projectId" gorm:"primaryKey"`
+	ProjectId string    `json:"projectId" gorm:"primaryKey"`
 	Label     string    `json:"label" gorm:"primaryKey"`
 	Color     string    `json:"color"`
 	Date      time.Time `json:"date"`
@@ -17,7 +17,7 @@ func (l LabelsModel) TableName() string {
 	return "labels"
 }
 
-func FindLabelsByProjectId(projectId int64) []LabelsModel {
+func FindLabelsByProjectId(projectId string) []LabelsModel {
 	db, _ := config.ConnectDB()
 
 	var data []LabelsModel

@@ -5,7 +5,7 @@ import (
 )
 
 type UserModel struct {
-	UserId           int64     `json:"userId" gorm:"primaryKey"`
+	UserId           string    `json:"userId" gorm:"primaryKey"`
 	EmailUser        string    `json:"emailUser"`
 	UserName         string    `json:"userName"`
 	UserPassword     string    `json:"userPassword"`

@@ -1,8 +1,6 @@
 package model
 
 import (
-	"fmt"
-
 	"github.com/dandirahmawan/menej_api_go/config"
 )
 
@@ -25,7 +23,6 @@ func FindDataStart(sessionid string) StartData {
 		"join session ssn on ssn.account_id = usr.user_id \n" +
 		"where ssn.id = '" + sessionid + "'"
 
-	fmt.Println(SQL)
 	db, _ := config.ConnectDB()
 
 	var data StartData

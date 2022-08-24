@@ -1,14 +1,18 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/dandirahmawan/menej_api_go/config"
+)
 
 type ViewModule struct {
 	ModulId        string               `json:"modulId" gorm:"primaryKey"`
 	ProjectId      string               `json:"projectId"`
 	ModulName      string               `json:"modulName"`
 	Pic            string               `json:"pic"`
-	CreatedBy      uint8                `json:"createdBy"`
-	UpdatedBy      uint8                `json:"updatedBy"`
+	CreatedBy      string               `json:"createdBy"`
+	UpdatedBy      string               `json:"updatedBy"`
 	CreatedDate    time.Time            `json:"createdDate"`
 	UpdatedDate    time.Time            `json:"updatedDate"`
 	EndDate        time.Time            `json:"endDate"`
@@ -26,4 +30,13 @@ type ViewModule struct {
 
 func (v ViewModule) TableName() string {
 	return "view_module"
+}
+
+func (v ViewModule) FindById() ViewModule {
+	db, _ := config.ConnectDB()
+
+	type M ViewModule
+	var data ViewModule
+	db.Where(&M{ModulId: v.ModulId}).Preload("Label").Preload("AssignTo").Find(&data)
+	return data
 }

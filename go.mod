@@ -35,6 +35,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.3 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	github.com/santosh/gingo v0.0.0-20220804052603-6e847362ff15 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/stretchr/testify v1.8.0 // indirect
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a // indirect

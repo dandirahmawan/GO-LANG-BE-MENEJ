@@ -22,3 +22,11 @@ func GetAllViewProjects(ctx *gin.Context) []model.ViewProjectModel {
 	DB.Raw(rawQuery).Scan(&data)
 	return data
 }
+
+func GetProjectById(ctx *gin.Context) model.ViewProjectModel {
+	id := ctx.Param("id")
+	type Mod model.ViewProjectModel
+	var data model.ViewProjectModel
+	DB.Where(&Mod{ProjectId: id}).Find(&data)
+	return data
+}

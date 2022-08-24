@@ -32,3 +32,15 @@ func FindSectionByProjectId(projectId string) []SectionModel {
 	}
 	return data
 }
+
+func FindSectionOnlyByProjectId(projectId string) []SectionModel {
+	db, _ := config.ConnectDB()
+	var data []SectionModel
+	err := db.Model(&SectionModel{}).Where(&SectionModel{ProjectId: projectId}).Find(&data)
+
+	// db.Where(&Mod{EmailUser: email, UserPassword: pass}).Find(&data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return data
+}
