@@ -1,6 +1,11 @@
 package services
 
 import (
+	"encoding/json"
+	"fmt"
+	"time"
+
+	"github.com/dandirahmawan/menej_api_go/commons"
 	"github.com/dandirahmawan/menej_api_go/model"
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +18,11 @@ type ResultModuleDetail struct {
 	LabelModule      interface{} `json:"labelModules"`
 	DocumentFile     interface{} `json:"documentFile"`
 	AssignedModules  interface{} `json:"assignedModules"`
+}
+
+type ParamModuleInput struct {
+	Checklist []model.BugsModel `json:"checklist"`
+	Module    model.ModulInput  `json:"module"`
 }
 
 func GetModuleByProjecId(projectid string) []model.SectionModel {
@@ -65,4 +75,149 @@ func GetDataModuleDetail(ctx *gin.Context) interface{} {
 	resp.AssignedModules = dataAssigned
 	resp.DocumentFile = dataDocFile
 	return resp
+}
+
+func SaveModule(ctx *gin.Context) interface{} {
+	var param ParamModuleInput
+	ctx.BindJSON(&param)
+
+	moduleInput := param.Module
+	checklist := param.Checklist
+	assigned := moduleInput.Assigned
+
+	var mod model.ModulModel
+	var data model.ModulModel
+
+	/*get data session*/
+	sessionid := ctx.Request.Header.Get("sessionid")
+	dataSession := commons.GetDataSession(sessionid)
+
+	// fmt.Println(data)
+	id := ctx.Param("id")
+	fmt.Println("id", id)
+	var mId string
+	if id == "" {
+		mId = commons.GeneratdUUID(20)
+	} else {
+		mId = id
+		data = mod.FindById()
+	}
+
+	data.ModulId = mId
+	data.ModulName = moduleInput.ModuleName
+	data.ProjectId = moduleInput.ProjectId
+	data.Description = moduleInput.Desc
+	data.ModulStatus = moduleInput.Status
+	data.UpdatedDate = time.Now()
+	data.SectionId = moduleInput.Section
+	data.UpdatedBy = dataSession.AccountId
+	data.IsTrash = "N"
+	// data.OldSectionId = moduleInput.OldSectionId
+
+	if id == "" {
+		data.CreatedBy = dataSession.AccountId
+		data.CreatedDate = time.Now()
+	}
+
+	/*set end or due date module*/
+	// fmt.Println("input date :", moduleInput.Date)
+	endDate, err := time.Parse("2006-01-02", moduleInput.Date)
+	data.EndDate = endDate
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if id == "" {
+		data.SaveModule()
+	} else {
+		data.Update()
+	}
+
+	/*set data label module*/
+	setDataLabel(moduleInput.LabelModule, data)
+
+	/*set data assigned*/
+	setDataAssigned(assigned, data)
+
+	/*set data checklist*/
+	setDataChecklist(checklist, data)
+
+	/*getd data after update*/
+	var vm model.ViewModule
+	vm.ModulId = data.ModulId
+	dataModule := vm.FindById()
+
+	/*get data bugs*/
+	var bugs model.ViewBugs
+	bugs.ModulId = data.ModulId
+	dataBugs := bugs.FindByModulId()
+
+	/*set response update module*/
+	type respUpdate struct {
+		Success    bool             `json:"success"`
+		Module     model.ViewModule `json:"module"`
+		Checklists []model.ViewBugs `json:"checklist"`
+	}
+
+	var resp respUpdate
+	resp.Success = true
+	resp.Module = dataModule
+	resp.Checklists = dataBugs
+	return resp
+}
+
+func setDataAssigned(assigned string, module model.ModulModel) {
+	type JsonAssigned struct {
+		UserId   string `json:"userId"`
+		ModuleId string `json:"moduleId"`
+	}
+
+	var arr []JsonAssigned
+	json.Unmarshal([]byte(assigned), &arr)
+	if len(arr) > 0 {
+		model.DeleteAsignedByMoudlId(module.ModulId)
+		for i := 0; i < len(arr); i++ {
+			item := arr[i]
+
+			var am model.AssignedModel
+			am.ModuleId = module.ModulId
+			am.UserId = item.UserId
+			am.Save()
+			// fmt.Println(item)
+		}
+	}
+}
+
+func setDataLabel(labelModule string, module model.ModulModel) {
+	var arrLabel []model.LabelModule
+	json.Unmarshal([]byte(labelModule), &arrLabel)
+	if len(arrLabel) > 0 {
+		/*delete old data*/
+		model.DeleteLabelModuleByModuleId(module.ModulId)
+
+		for i := 0; i < len(arrLabel); i++ {
+			item := arrLabel[i]
+			item.ModuleId = module.ModulId
+			item.ProjectId = module.ProjectId
+			item.Save()
+		}
+	}
+}
+
+func setDataChecklist(checklist []model.BugsModel, module model.ModulModel) {
+	for i := 0; i < len(checklist); i++ {
+		item := checklist[i]
+		bugsId := item.BugsId
+
+		if bugsId == "-1" {
+			bi := commons.GeneratdUUID(20)
+			item.BugsId = bi
+			item.ModulId = module.ModulId
+			item.ProjectId = module.ProjectId
+			item.Save()
+		} else {
+			item.Update()
+		}
+	}
 }

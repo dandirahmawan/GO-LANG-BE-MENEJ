@@ -19,6 +19,12 @@ func (s SectionModel) TableName() string {
 
 func FindSectionByProjectId(projectId string) []SectionModel {
 	db, _ := config.ConnectDB()
+
+	defer func() {
+		dbConn, _ := db.DB()
+		dbConn.Close()
+	}()
+
 	var data []SectionModel
 	err := db.Model(&SectionModel{}).
 		Preload("Modules").
@@ -35,6 +41,12 @@ func FindSectionByProjectId(projectId string) []SectionModel {
 
 func FindSectionOnlyByProjectId(projectId string) []SectionModel {
 	db, _ := config.ConnectDB()
+
+	defer func() {
+		dbConn, _ := db.DB()
+		dbConn.Close()
+	}()
+
 	var data []SectionModel
 	err := db.Model(&SectionModel{}).Where(&SectionModel{ProjectId: projectId}).Find(&data)
 

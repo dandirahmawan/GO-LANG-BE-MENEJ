@@ -26,6 +26,12 @@ func (p ProjectModel) TableName() string {
 
 func FindAllProject() []ProjectModel {
 	db, _ := config.ConnectDB()
+
+	defer func() {
+		dbConn, _ := db.DB()
+		dbConn.Close()
+	}()
+
 	var data []ProjectModel
 	db.Find(&data)
 

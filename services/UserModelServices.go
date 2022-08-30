@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/dandirahmawan/menej_api_go/commons"
@@ -8,12 +9,12 @@ import (
 	"github.com/dandirahmawan/menej_api_go/model"
 )
 
-func FindByEmailAndPassword(email string, pass string) interface{} {
-	db, _ := config.ConnectDB()
+func FinDByEmailAndPassword(email string, pass string) interface{} {
+	DB, _ := config.ConnectDB()
 	var data []model.UserModel
 	type Mod model.UserModel
 
-	db.Where(&Mod{EmailUser: email, UserPassword: pass}).Find(&data)
+	DB.Where(&Mod{EmailUser: email, UserPassword: pass}).Find(&data)
 
 	count := len(data)
 	if count <= 0 {
@@ -39,7 +40,8 @@ func FindByEmailAndPassword(email string, pass string) interface{} {
 	}
 
 	accountId := data[0].UserId
-	token := commons.RandStringRunes(30)
+	token := commons.GeneratdUUID(30)
+	fmt.Println("token ", token)
 
 	/*sava data session*/
 	SaveSessionLogin(accountId, token)
@@ -57,10 +59,10 @@ func FindByEmailAndPassword(email string, pass string) interface{} {
 }
 
 func FindAllUser() []model.UserModel {
-	db, _ := config.ConnectDB()
+	DB, _ := config.ConnectDB()
 	var data []model.UserModel
 
-	db.Find(&data)
+	DB.Find(&data)
 	return data
 }
 

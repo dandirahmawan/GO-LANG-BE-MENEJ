@@ -18,6 +18,11 @@ func (v ViewProjectTeam) TableName() string {
 func FindViewProjectTeamByProjectId(projectId string) []ViewProjectTeam {
 	db, _ := config.ConnectDB()
 
+	defer func() {
+		dbConn, _ := db.DB()
+		dbConn.Close()
+	}()
+
 	type Model ViewProjectTeam
 	var Data []ViewProjectTeam
 	db.Where(&Model{ProjectId: projectId}).Find(&Data)

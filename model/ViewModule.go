@@ -35,6 +35,11 @@ func (v ViewModule) TableName() string {
 func (v ViewModule) FindById() ViewModule {
 	db, _ := config.ConnectDB()
 
+	defer func() {
+		dbConn, _ := db.DB()
+		dbConn.Close()
+	}()
+
 	type M ViewModule
 	var data ViewModule
 	db.Where(&M{ModulId: v.ModulId}).Preload("Label").Preload("AssignTo").Find(&data)

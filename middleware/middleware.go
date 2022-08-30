@@ -1,10 +1,10 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/dandirahmawan/menej_api_go/config"
 	"github.com/dandirahmawan/menej_api_go/constanta"
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +18,7 @@ func CORSMiddleware() gin.HandlerFunc {
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		// c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
 
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
@@ -48,13 +48,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			}
 		}
 
-		_, err := config.ConnectDB()
-
-		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, err.Error())
-			panic("Database connection is failure")
-		}
-
 		c.Next()
 	}
 }
@@ -64,7 +57,7 @@ func isUrlNonAuth(url string) bool {
 
 	for i := 0; i < len(constanta.UrlNotAuth); i++ {
 		item := constanta.UrlNotAuth[i]
-
+		fmt.Println(item, url)
 		if strings.Contains(url, item) {
 			result = true
 			break

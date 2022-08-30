@@ -18,6 +18,11 @@ func (v ViewAssignedModule) FindByModulId() []ViewAssignedModule {
 	type M ViewAssignedModule
 	db, _ := config.ConnectDB()
 
+	defer func() {
+		dbConn, _ := db.DB()
+		dbConn.Close()
+	}()
+
 	var data []ViewAssignedModule
 	db.Where(M{ModuleId: v.ModuleId}).Find(&data)
 	return data

@@ -17,6 +17,11 @@ func (v ViewLabelModule) FindByModulId() []ViewLabelModule {
 	db, _ := config.ConnectDB()
 	type M ViewLabelModule
 
+	defer func() {
+		dbConn, _ := db.DB()
+		dbConn.Close()
+	}()
+
 	var data []ViewLabelModule
 	db.Where(&M{ModuleId: v.ModuleId}).Find(&data)
 	return data

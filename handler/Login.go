@@ -18,6 +18,6 @@ func Login(ctx *gin.Context) {
 
 	email := form.Email
 	password := form.Password
-	data := services.FindByEmailAndPassword(email, password)
+	data := services.FinDByEmailAndPassword(email, password)
 	ctx.IndentedJSON(http.StatusOK, data)
 }
