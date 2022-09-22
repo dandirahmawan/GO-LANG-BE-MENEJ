@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"github.com/dandirahmawan/menej_api_go/config"
 )
 
 type SessionModel struct {
@@ -20,12 +18,13 @@ func SaveSession(s SessionModel) {
 	s.SaveData()
 }
 
-func (m SessionModel) SaveData() {
-	db, _ := config.ConnectDB()
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
+func (m SessionModel) findBySessionid() []SessionModel {
+	type MS SessionModel
+	var data []SessionModel
+	DB.Where(MS{Id: m.Id}).Find(&data)
+	return data
+}
 
-	db.Create(m) /*save to db*/
+func (m SessionModel) SaveData() {
+	DB.Create(m) /*save to db*/
 }

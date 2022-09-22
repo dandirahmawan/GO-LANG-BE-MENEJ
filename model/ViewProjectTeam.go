@@ -1,7 +1,5 @@
 package model
 
-import "github.com/dandirahmawan/menej_api_go/config"
-
 type ViewProjectTeam struct {
 	ProjectId  string `json:"projectId" gorm:"primaryKey"`
 	UserId     string `json:"userId" gorm:"primaryKey"`
@@ -16,16 +14,9 @@ func (v ViewProjectTeam) TableName() string {
 }
 
 func FindViewProjectTeamByProjectId(projectId string) []ViewProjectTeam {
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
 	type Model ViewProjectTeam
 	var Data []ViewProjectTeam
-	db.Where(&Model{ProjectId: projectId}).Find(&Data)
+	DB.Where(&Model{ProjectId: projectId}).Find(&Data)
 
 	return Data
 }

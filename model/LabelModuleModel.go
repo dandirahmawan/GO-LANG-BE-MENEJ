@@ -1,9 +1,5 @@
 package model
 
-import (
-	"github.com/dandirahmawan/menej_api_go/config"
-)
-
 // var DB, _ = config.ConnectDB()
 
 type LabelModule struct {
@@ -17,23 +13,9 @@ func (m LabelModule) TableName() string {
 }
 
 func DeleteLabelModuleByModuleId(modulId string) {
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
-	db.Delete(LabelModule{}, "module_id = ?", modulId)
+	DB.Delete(LabelModule{}, "module_id = ?", modulId)
 }
 
 func (m LabelModule) Save() {
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
-	db.Create(&m)
+	DB.Create(&m)
 }

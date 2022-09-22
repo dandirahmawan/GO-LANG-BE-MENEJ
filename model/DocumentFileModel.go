@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"github.com/dandirahmawan/menej_api_go/config"
 )
 
 type DocumentFile struct {
@@ -25,36 +23,18 @@ func (m DocumentFile) TableName() string {
 }
 
 func (m DocumentFile) Save() {
-	db, _ := config.ConnectDB()
 
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
-	db.Save(&m)
+	DB.Save(&m)
 }
 
 func (m DocumentFile) FindById() DocumentFile {
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
 
 	var data DocumentFile
-	db.Where(DocumentFile{Id: m.Id}).Find(&data)
+	DB.Where(DocumentFile{Id: m.Id}).Find(&data)
 	return data
 }
 
 func (m DocumentFile) DeleteById() {
-	db, _ := config.ConnectDB()
 
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
-	db.Delete(DocumentFile{Id: m.Id})
+	DB.Delete(DocumentFile{Id: m.Id})
 }

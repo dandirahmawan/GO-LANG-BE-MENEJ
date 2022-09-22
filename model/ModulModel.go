@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"github.com/dandirahmawan/menej_api_go/config"
 )
 
 type ModulInput struct {
@@ -41,40 +39,28 @@ func (m ModulModel) TableName() string {
 	return "modul"
 }
 
+func (m ModulModel) DeleteById() int16 {
+	var mod ModulModel
+	DB.Where("modul_id = ?", m.ModulId).Delete(&mod)
+	return 1
+}
+
 func (m ModulModel) FindById() ModulModel {
 	type Mod ModulModel
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
 	var data ModulModel
-	db.Where(Mod{ModulId: m.ModulId}).Find(&data)
+	DB.Where(Mod{ModulId: m.ModulId}).Find(&data)
+
 	return data
 }
 
 func (m ModulModel) Update() ModulModel {
-	db, _ := config.ConnectDB()
+	DB.Updates(&m)
 
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
-	db.Updates(&m)
 	return m
 }
 
 func (m ModulModel) SaveModule() interface{} {
-	db, _ := config.ConnectDB()
+	DB.Save(&m)
 
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
-	db.Save(&m)
 	return m
 }

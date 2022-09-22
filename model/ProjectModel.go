@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"github.com/dandirahmawan/menej_api_go/config"
 )
 
 type ProjectModel struct {
@@ -25,15 +23,9 @@ func (p ProjectModel) TableName() string {
 }
 
 func FindAllProject() []ProjectModel {
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
 
 	var data []ProjectModel
-	db.Find(&data)
+	DB.Find(&data)
 
 	return data
 }

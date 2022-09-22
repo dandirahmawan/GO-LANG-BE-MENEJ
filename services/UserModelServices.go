@@ -5,12 +5,11 @@ import (
 	"time"
 
 	"github.com/dandirahmawan/menej_api_go/commons"
-	"github.com/dandirahmawan/menej_api_go/config"
 	"github.com/dandirahmawan/menej_api_go/model"
 )
 
 func FinDByEmailAndPassword(email string, pass string) interface{} {
-	DB, _ := config.ConnectDB()
+
 	var data []model.UserModel
 	type Mod model.UserModel
 
@@ -59,7 +58,7 @@ func FinDByEmailAndPassword(email string, pass string) interface{} {
 }
 
 func FindAllUser() []model.UserModel {
-	DB, _ := config.ConnectDB()
+
 	var data []model.UserModel
 
 	DB.Find(&data)

@@ -17,6 +17,7 @@ type ResultModuleDetail struct {
 	DataStatus       interface{} `json:"dataStatus"`
 	LabelModule      interface{} `json:"labelModules"`
 	DocumentFile     interface{} `json:"documentFile"`
+	DataSection      interface{} `json:"sectionModules"`
 	AssignedModules  interface{} `json:"assignedModules"`
 }
 
@@ -38,9 +39,9 @@ func GetDataStatus(ctx *gin.Context) interface{} {
 	return sm.FindByProjectId()
 }
 
-func GetDataModuleDetail(ctx *gin.Context) interface{} {
-	mi := ctx.Param("id")
-	userId := ctx.Request.Header.Get("userid")
+func GetDataModuleDetail(id string, userid string) interface{} {
+	mi := id
+	userId := userid
 	var bugs model.ViewBugs
 	var module model.ViewModule
 	var status model.StatusModule
@@ -65,6 +66,7 @@ func GetDataModuleDetail(ctx *gin.Context) interface{} {
 	status.ProjectId = projectId
 	dataStatus := status.FindByProjectId()
 	dataPermition := model.FindDataPermitionByProjectIdAndUserId(projectId, userId)
+	dataSection := model.FindSectionOnlyByProjectId(projectId)
 
 	var resp ResultModuleDetail
 	resp.Bugs = dataBugs
@@ -74,6 +76,7 @@ func GetDataModuleDetail(ctx *gin.Context) interface{} {
 	resp.PermitionProject = dataPermition
 	resp.AssignedModules = dataAssigned
 	resp.DocumentFile = dataDocFile
+	resp.DataSection = dataSection
 	return resp
 }
 
@@ -143,27 +146,7 @@ func SaveModule(ctx *gin.Context) interface{} {
 	/*set data checklist*/
 	setDataChecklist(checklist, data)
 
-	/*getd data after update*/
-	var vm model.ViewModule
-	vm.ModulId = data.ModulId
-	dataModule := vm.FindById()
-
-	/*get data bugs*/
-	var bugs model.ViewBugs
-	bugs.ModulId = data.ModulId
-	dataBugs := bugs.FindByModulId()
-
-	/*set response update module*/
-	type respUpdate struct {
-		Success    bool             `json:"success"`
-		Module     model.ViewModule `json:"module"`
-		Checklists []model.ViewBugs `json:"checklist"`
-	}
-
-	var resp respUpdate
-	resp.Success = true
-	resp.Module = dataModule
-	resp.Checklists = dataBugs
+	var resp interface{} = GetDataModuleDetail(mId, dataSession.AccountId)
 	return resp
 }
 
@@ -220,4 +203,26 @@ func setDataChecklist(checklist []model.BugsModel, module model.ModulModel) {
 			item.Update()
 		}
 	}
+}
+
+func DeleteModuleById(moduleid string) interface{} {
+	var mod model.ModulModel
+	mod.ModulId = moduleid
+	i := mod.DeleteById()
+
+	type resp struct {
+		Success bool   `json:"success"`
+		Message string `json:"message"`
+	}
+
+	var rsp resp
+	if i == 0 {
+		rsp.Message = "Somethin wrong when delete module"
+		rsp.Success = false
+	} else {
+		rsp.Message = "Delete module successfully"
+		rsp.Success = true
+	}
+
+	return rsp
 }

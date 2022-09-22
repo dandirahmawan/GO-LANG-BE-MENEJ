@@ -46,6 +46,10 @@ func AuthMiddleware() gin.HandlerFunc {
 				c.Abort()
 				return
 			}
+
+			/*validate token or sessionid*/
+			sessionid := c.Request.Header.Get("sessionid")
+			fmt.Println("sessionid is ", sessionid)
 		}
 
 		c.Next()

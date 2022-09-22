@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"github.com/dandirahmawan/menej_api_go/config"
 )
 
 type LabelsModel struct {
@@ -18,25 +16,11 @@ func (l LabelsModel) TableName() string {
 }
 
 func (m LabelsModel) Save() {
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
-	db.Save(m)
+	DB.Save(m)
 }
 
 func FindLabelsByProjectId(projectId string) []LabelsModel {
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
 	var data []LabelsModel
-	db.Where(&LabelsModel{ProjectId: projectId}).Find(&data)
+	DB.Where(&LabelsModel{ProjectId: projectId}).Find(&data)
 	return data
 }

@@ -23,3 +23,9 @@ type TableName interface {
 func (u UserModel) TableName() string {
 	return "user"
 }
+
+func (u UserModel) FindById() UserModel {
+	var data UserModel
+	DB.Where(UserModel{UserId: u.UserId}).Find(&data)
+	return data
+}

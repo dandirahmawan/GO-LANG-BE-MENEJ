@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"github.com/dandirahmawan/menej_api_go/config"
 )
 
 type ViewDocumentFile struct {
@@ -30,29 +28,23 @@ func (m ViewDocumentFile) TableName() string {
 }
 
 func (m ViewDocumentFile) FindByModulId() []ViewDocumentFile {
-	db, _ := config.ConnectDB()
 	type M ViewDocumentFile
 	var data []ViewDocumentFile
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
-	db.Where(M{ModulId: m.ModulId}).Find(&data)
+	DB.Where(M{ModulId: m.ModulId}).Find(&data)
 	return data
 }
 
 func (m ViewDocumentFile) FindById() ViewDocumentFile {
-	db, _ := config.ConnectDB()
 	type M ViewDocumentFile
 	var data ViewDocumentFile
 
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
+	DB.Where(ViewDocumentFile{Id: m.Id}).Find(&data)
+	return data
+}
 
-	db.Where(ViewDocumentFile{Id: m.Id}).Find(&data)
+func (m ViewDocumentFile) FindByProjectId() []ViewDocumentFile {
+	type M ViewDocumentFile
+	var data []ViewDocumentFile
+	DB.Where(ViewDocumentFile{ProjectId: m.ProjectId}).Find(&data)
 	return data
 }

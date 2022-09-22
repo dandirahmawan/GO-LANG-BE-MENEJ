@@ -2,8 +2,6 @@ package model
 
 import (
 	"fmt"
-
-	"github.com/dandirahmawan/menej_api_go/config"
 )
 
 type StartData struct {
@@ -26,14 +24,8 @@ func FindDataStart(sessionid string) StartData {
 		"where ssn.id = '" + sessionid + "'"
 
 	fmt.Println(SQL)
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
 
 	var data StartData
-	db.Raw(SQL).Find(&data)
+	DB.Raw(SQL).Find(&data)
 	return data
 }

@@ -1,12 +1,10 @@
 package model
 
-import "github.com/dandirahmawan/menej_api_go/config"
-
 type PermitionProject struct {
-	PermitionConde       int16
-	PermitionName        string
-	PermitionDescription string
-	IsChecked            string
+	PermitionCode        int16  `json:"permitionCode"`
+	PermitionName        string `json:"permitionName"`
+	PermitionDescription string `json:"permitionDescription"`
+	IsChecked            string `json:"isChecked"`
 }
 
 func FindDataPermitionByProjectIdAndUserId(userId string, projectId string) []PermitionProject {
@@ -37,14 +35,7 @@ func FindDataPermitionByProjectIdAndUserId(userId string, projectId string) []Pe
 		"				) R \n" +
 		"				ORDER BY R.permition_code"
 
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
 	var data []PermitionProject
-	db.Raw(sql).Find(&data)
+	DB.Raw(sql).Find(&data)
 	return data
 }

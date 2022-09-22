@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/dandirahmawan/menej_api_go/commons"
 	"github.com/dandirahmawan/menej_api_go/model"
 	"github.com/dandirahmawan/menej_api_go/services"
 	"github.com/gin-gonic/gin"
@@ -23,13 +24,25 @@ func PostModule(ctx *gin.Context) {
 	ctx.IndentedJSON(http.StatusOK, data)
 }
 
+func DeleteModule(ctx *gin.Context) {
+	id := ctx.Param("id")
+	data := services.DeleteModuleById(id)
+	ctx.IndentedJSON(http.StatusOK, data)
+}
+
 func PutModule(ctx *gin.Context) {
 	data := services.SaveModule(ctx)
+
 	ctx.IndentedJSON(http.StatusOK, data)
 }
 
 func GetModule(ctx *gin.Context) {
 	id := ctx.Param("id")
+
+	/*get data session*/
+	sessionid := ctx.Request.Header.Get("sessionid")
+	dataSession := commons.GetDataSession(sessionid)
+	accountid := dataSession.AccountId
 
 	dataModule := services.GetModuleByProjecId(id)
 	dataTeam := services.GetProjectTeamByProjectId(ctx)
@@ -38,7 +51,7 @@ func GetModule(ctx *gin.Context) {
 	dataProject := services.GetProjectById(ctx)
 	dataProjectArr := []model.ViewProjectModel{dataProject}
 
-	dataPermition := services.GetDataPermition(ctx)
+	dataPermition := services.GetDataPermition(accountid, id)
 	dataSection := services.GetDataSection(ctx)
 	dataStatus := services.GetDataStatus(ctx)
 
@@ -65,7 +78,9 @@ func GetModule(ctx *gin.Context) {
 }
 
 func GetModuleById(ctx *gin.Context) {
-	data := services.GetDataModuleDetail(ctx)
+	id := ctx.Param("id")
+	userid := ctx.Request.Header.Get("userid")
+	data := services.GetDataModuleDetail(id, userid)
 	ctx.IndentedJSON(http.StatusOK, data)
 }
 

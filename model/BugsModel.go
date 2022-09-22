@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"github.com/dandirahmawan/menej_api_go/config"
 )
 
 type BugsModel struct {
@@ -22,21 +20,9 @@ func (m BugsModel) TableName() string {
 }
 
 func (m BugsModel) Save() {
-	db, _ := config.ConnectDB()
-	db.Save(m)
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
+	DB.Save(m)
 }
 
 func (m BugsModel) Update() {
-	db, _ := config.ConnectDB()
-	db.Updates(m)
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
+	DB.Updates(m)
 }

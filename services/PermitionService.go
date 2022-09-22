@@ -1,14 +1,28 @@
 package services
 
 import (
+	"strings"
+
 	"github.com/dandirahmawan/menej_api_go/model"
-	"github.com/gin-gonic/gin"
 )
 
-func GetDataPermition(ctx *gin.Context) interface{} {
-	userId := ctx.Request.Header.Get("userid")
-	projectId := ctx.Param("id")
+func GetDataPermition(userid string, projectid string) interface{} {
 	var data []model.PermitionProject
-	data = model.FindDataPermitionByProjectIdAndUserId(userId, projectId)
+	data = model.FindDataPermitionByProjectIdAndUserId(userid, projectid)
 	return data
+}
+
+func SetPermition(permitionCode string, projectId string, userId string) {
+	/*delete old permition first*/
+	var modelPermition model.PermitionModel
+	modelPermition.ProjectId = projectId
+	modelPermition.UserId = userId
+	modelPermition.DeleteByProjectIdUserId()
+
+	var arrp []string
+	arrp = strings.Split(permitionCode, ",")
+	for i := 0; i < len(arrp); i++ {
+		modelPermition.PermitionCode = arrp[i]
+		modelPermition.Save()
+	}
 }

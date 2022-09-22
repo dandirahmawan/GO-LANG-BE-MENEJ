@@ -21,3 +21,9 @@ func ConnectDB() (*gorm.DB, error) {
 	DB = db
 	return db, err
 }
+
+func CloseConnection(db *gorm.DB) {
+	dbConn, _ := DB.DB()
+	dbConn.Close()
+	fmt.Println("close connection")
+}

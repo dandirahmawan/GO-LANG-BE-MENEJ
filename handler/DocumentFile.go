@@ -10,11 +10,18 @@ import (
 func PostDocumentFile(ctx *gin.Context) {
 	data := services.Upload(ctx)
 	ctx.IndentedJSON(http.StatusOK, data)
-	// ctx.String(http.StatusOK, ("'%s' uploaded!"))
-	// ctx.IndentedJSON(http.StatusOK, "dandi rahmawan")
+}
+
+func GetDocumentFile(ctx *gin.Context) {
+	data := services.GetDocumentFileByProjectId(ctx)
+	ctx.IndentedJSON(http.StatusOK, data)
 }
 
 func DeleteDocumentFile(ctx *gin.Context) {
 	data := services.DeleteDocumentFile(ctx)
 	ctx.IndentedJSON(http.StatusOK, data)
+}
+
+func DownloadFile(ctx *gin.Context) {
+	services.DownloadFile(ctx)
 }

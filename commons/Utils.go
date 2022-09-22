@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dandirahmawan/menej_api_go/config"
 	"github.com/dandirahmawan/menej_api_go/model"
 )
 
@@ -22,10 +21,15 @@ func GeneratdUUID(n int) string {
 }
 
 func GetDataSession(sessionid string) model.SessionModel {
-	DB, _ := config.ConnectDB()
 	type Model model.SessionModel
 	var data model.SessionModel
-	DB.Where(Model{Id: sessionid}).Find(&data)
+	model.DB.Where(Model{Id: sessionid}).Find(&data)
+
+	// defer func() {
+	// 	config.CloseConnection(DB)
+	// 	config.CloseConnection(exc)
+	// 	fmt.Println("close connection get data session")
+	// }()
 
 	return data
 }

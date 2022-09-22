@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"github.com/dandirahmawan/menej_api_go/config"
 )
 
 type ViewModule struct {
@@ -33,15 +31,8 @@ func (v ViewModule) TableName() string {
 }
 
 func (v ViewModule) FindById() ViewModule {
-	db, _ := config.ConnectDB()
-
-	defer func() {
-		dbConn, _ := db.DB()
-		dbConn.Close()
-	}()
-
 	type M ViewModule
 	var data ViewModule
-	db.Where(&M{ModulId: v.ModulId}).Preload("Label").Preload("AssignTo").Find(&data)
+	DB.Where(&M{ModulId: v.ModulId}).Preload("Label").Preload("AssignTo").Find(&data)
 	return data
 }
