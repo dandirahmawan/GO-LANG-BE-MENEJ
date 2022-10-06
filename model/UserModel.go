@@ -14,6 +14,7 @@ type UserModel struct {
 	SessionId        string    `json:"sessionId"`
 	Date             time.Time `json:"date"`
 	PicProfileDetail string    `json:"picProfileDetail"`
+	IsConfirmed      int16     `json:"isConfirmed"`
 }
 
 type TableName interface {
@@ -22,6 +23,17 @@ type TableName interface {
 
 func (u UserModel) TableName() string {
 	return "user"
+}
+
+func (u UserModel) Save() UserModel {
+	DB.Create(&u)
+	return u
+}
+
+func (u UserModel) FindByEmail() []UserModel {
+	var data []UserModel
+	DB.Where(UserModel{EmailUser: u.EmailUser}).Find(&data)
+	return data
 }
 
 func (u UserModel) FindById() UserModel {

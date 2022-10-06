@@ -5,11 +5,11 @@ import (
 )
 
 type ProjectModel struct {
-	ProjectId   int64
+	ProjectId   string
 	ProjectName string
-	CreatedBy   int64
+	CreatedBy   string
 	CreatedDate time.Time
-	Pic         int64
+	Pic         string
 	IsClose     string
 	IsDelete    string
 }
@@ -28,4 +28,8 @@ func FindAllProject() []ProjectModel {
 	DB.Find(&data)
 
 	return data
+}
+
+func (m ProjectModel) Save() {
+	DB.Create(m)
 }

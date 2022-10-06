@@ -35,6 +35,7 @@ func main() {
 	route.GET("/attachment/list/:id", handler.GetDocumentFile)
 	route.GET("/permition/:projectid/:userid", handler.GetPermitionProject)
 
+	route.POST("/project", handler.PostProject)
 	route.POST("/module", handler.PostModule)
 	route.POST("/project/list", handler.GetAllProjects)
 	route.POST("/loginApp", handler.Login)
@@ -42,6 +43,7 @@ func main() {
 	route.POST("/label", handler.PostLabel)
 	route.POST("/section", handler.PostSection)
 	route.POST("/set_permition", handler.SetPermition)
+	route.POST("/register", handler.Register)
 
 	route.GET("/file/:id", handler.DownloadFile)
 	route.PUT("/module/:id", handler.PutModule)

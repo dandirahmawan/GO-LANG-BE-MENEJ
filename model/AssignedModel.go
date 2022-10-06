@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 type AssignedModel struct {
 	ModuleId string `json:"moduleId"`
 	UserId   string `json:"userId"`
@@ -14,5 +16,8 @@ func (m AssignedModel) Save() {
 }
 
 func DeleteAsignedByMoudlId(modulId string) {
-	DB.Delete(&AssignedModel{}, "module_id = ?", modulId)
+	err := DB.Delete(&AssignedModel{}, "module_id = ?", modulId)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

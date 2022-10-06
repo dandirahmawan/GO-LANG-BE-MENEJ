@@ -5,8 +5,58 @@ import (
 	"time"
 
 	"github.com/dandirahmawan/menej_api_go/commons"
+	"github.com/dandirahmawan/menej_api_go/input"
 	"github.com/dandirahmawan/menej_api_go/model"
 )
+
+func InsertUser(param input.InputUser) model.UserModel {
+	var userModel model.UserModel
+	userModel.EmailUser = param.Email
+	userModel.UserName = param.Name
+	userModel.UserPassword = param.Password
+	userModel.Date = time.Now()
+	userModel.IsConfirmed = 0
+	userModel.UserId = commons.GeneratdUUID(20)
+	exc := userModel.Save()
+	return exc
+}
+
+func RegisterUser(param input.InputUser) interface{} {
+	var userModel model.UserModel
+	userModel.EmailUser = param.Email
+	data := userModel.FindByEmail()
+
+	type resp struct {
+		Success bool        `json:"success"`
+		Message string      `json:"message"`
+		Data    interface{} `json:"data"`
+	}
+
+	var response resp
+	if (len(data)) > 0 {
+		response.Success = false
+		response.Message = "Email Is Not Available"
+	} else {
+		data := InsertUser(param)
+
+		/*Init data project*/
+		var inputProject input.InputProject
+		inputProject.ProjectName = "My First Project"
+
+		project := SaveProject(inputProject, data.UserId)
+		var section model.SectionModel
+		section.Id = commons.GeneratdUUID(20)
+		section.Section = "TO DO LIST"
+		section.CreatedDate = time.Now()
+		section.ProjectId = project.ProjectId
+		SaveSection(section)
+
+		response.Success = true
+		response.Message = "Register Is Successfully"
+		response.Data = data
+	}
+	return response
+}
 
 func FinDByEmailAndPassword(email string, pass string) interface{} {
 

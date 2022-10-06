@@ -32,7 +32,6 @@ func DeleteModule(ctx *gin.Context) {
 
 func PutModule(ctx *gin.Context) {
 	data := services.SaveModule(ctx)
-
 	ctx.IndentedJSON(http.StatusOK, data)
 }
 

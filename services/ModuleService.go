@@ -77,12 +77,18 @@ func GetDataModuleDetail(id string, userid string) interface{} {
 	resp.AssignedModules = dataAssigned
 	resp.DocumentFile = dataDocFile
 	resp.DataSection = dataSection
+	fmt.Println(resp)
 	return resp
 }
 
 func SaveModule(ctx *gin.Context) interface{} {
 	var param ParamModuleInput
-	ctx.BindJSON(&param)
+	err := ctx.BindJSON(&param)
+
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
 
 	moduleInput := param.Module
 	checklist := param.Checklist
@@ -97,7 +103,6 @@ func SaveModule(ctx *gin.Context) interface{} {
 
 	// fmt.Println(data)
 	id := ctx.Param("id")
-	fmt.Println("id", id)
 	var mId string
 	if id == "" {
 		mId = commons.GeneratdUUID(20)
@@ -106,6 +111,7 @@ func SaveModule(ctx *gin.Context) interface{} {
 		data = mod.FindById()
 	}
 
+	fmt.Println(data)
 	data.ModulId = mId
 	data.ModulName = moduleInput.ModuleName
 	data.ProjectId = moduleInput.ProjectId
@@ -157,7 +163,12 @@ func setDataAssigned(assigned string, module model.ModulModel) {
 	}
 
 	var arr []JsonAssigned
-	json.Unmarshal([]byte(assigned), &arr)
+	err := json.Unmarshal([]byte(assigned), &arr)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	if len(arr) > 0 {
 		model.DeleteAsignedByMoudlId(module.ModulId)
 		for i := 0; i < len(arr); i++ {
@@ -167,7 +178,6 @@ func setDataAssigned(assigned string, module model.ModulModel) {
 			am.ModuleId = module.ModulId
 			am.UserId = item.UserId
 			am.Save()
-			// fmt.Println(item)
 		}
 	}
 }

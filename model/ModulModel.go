@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -54,13 +55,25 @@ func (m ModulModel) FindById() ModulModel {
 }
 
 func (m ModulModel) Update() ModulModel {
-	DB.Updates(&m)
+	fmt.Println(m)
+	fmt.Println("description : " + m.Description)
+	fmt.Println("id : " + m.ModulId)
+	fmt.Println("------------------ module update ----------------------")
 
+	query := "update modul set modul_name ='" + m.ModulName + "',\n" +
+		"description = '" + m.Description + "',\n" +
+		"modul_status = '" + m.ModulStatus + "',\n" +
+		"section_id = '" + m.SectionId + "'\n" +
+		"where modul_id = '" + m.ModulId + "'"
+
+	DB.Raw(query).Scan(&m)
+	// DB.Where(ModulModel{ModulId: m.ModulId}).Updates(ModulModel{ModulName: m.ModulName, Description: "", ModulStatus: m.ModulStatus, SectionId: m.SectionId})
+	fmt.Println(m)
 	return m
 }
 
 func (m ModulModel) SaveModule() interface{} {
+	m.CreatedDate = time.Now()
 	DB.Save(&m)
-
 	return m
 }

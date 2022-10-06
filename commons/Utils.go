@@ -1,6 +1,7 @@
 package commons
 
 import (
+	"fmt"
 	"math/rand"
 	"strings"
 	"time"
@@ -23,8 +24,11 @@ func GeneratdUUID(n int) string {
 func GetDataSession(sessionid string) model.SessionModel {
 	type Model model.SessionModel
 	var data model.SessionModel
-	model.DB.Where(Model{Id: sessionid}).Find(&data)
+	err := model.DB.Where(Model{Id: sessionid}).Find(&data)
 
+	if err != nil {
+		fmt.Println(err)
+	}
 	// defer func() {
 	// 	config.CloseConnection(DB)
 	// 	config.CloseConnection(exc)
