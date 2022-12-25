@@ -3,7 +3,9 @@ package services
 import (
 	"time"
 
+	"github.com/dandirahmawan/menej_api_go/input"
 	"github.com/dandirahmawan/menej_api_go/model"
+	"github.com/dandirahmawan/menej_api_go/response_base"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,4 +23,22 @@ func SaveDataLabel(ctx *gin.Context) interface{} {
 	par.Date = time.Now()
 	par.Save()
 	return par
+}
+
+func DeleteLabel(input input.LabelDelete) interface{} {
+	isExist := IsExistsLabel(input.ProjectId, input.Label)
+	if !isExist {
+		return response_base.ResponseMsg(false, "Data label not found")
+	} else {
+		var dataLabel model.LabelsModel
+		dataLabel.ProjectId = input.ProjectId
+		dataLabel.Label = input.Label
+		dataLabel.Delete()
+		return response_base.ResponseMsg(true, "Delete label successfully")
+	}
+}
+
+func IsExistsLabel(projectId string, label string) bool {
+	data := model.FindLabelByIdAndLabel(projectId, label)
+	return len(data) > 0
 }

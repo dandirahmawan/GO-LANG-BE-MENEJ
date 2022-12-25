@@ -28,8 +28,6 @@ type FormUpload struct {
 }
 
 func Upload(ctx *gin.Context) interface{} {
-	// file, _ := ctx.FormFile("file")
-	// projectId := ctx.Bind("projectId")
 	var dataForm FormUpload
 	ctx.Bind(&dataForm)
 
@@ -58,13 +56,7 @@ func Upload(ctx *gin.Context) interface{} {
 		}
 
 		img = jpgI
-
 		file := img
-		// fileSize := file.Size
-		// filenameUpload := file.Filename
-		// idx := strings.Split(filenameUpload, ".")
-		// ext := "." + idx[len(idx)-1]
-
 		sessionid := ctx.Request.Header.Get("sessionid")
 		sessionData := commons.GetDataSession(sessionid)
 		userid := sessionData.AccountId
@@ -170,9 +162,6 @@ func DownloadFile(ctx *gin.Context) {
 	fileContentType := path.Ext(data.Path)
 	fmt.Println(fileContentType)
 	ctx.Header("Content-Type", "application/octet-stream")
-	//Force browser download
-	// ctx.Header("Content-Disposition", "attachment; filename="+data.FileName)
-	//Browser download or preview
 	ctx.Header("Content-Disposition", "inline;filename="+data.FileName)
 	ctx.Header("Content-Transfer-Encoding", "binary")
 	ctx.Header("Cache-Control", "no-cache")

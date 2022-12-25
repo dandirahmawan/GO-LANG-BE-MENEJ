@@ -59,7 +59,7 @@ func FindSectionOnlyByProjectId(projectId string) []SectionModel {
 	var data []SectionModel
 	err := DB.Where(&SectionModel{ProjectId: projectId}).Order("created_date ASC").Find(&data)
 
-	fmt.Println(data)
+	// fmt.Println(data)
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -9,7 +9,7 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDB() {
+func ConnectDB() *gorm.DB {
 	fmt.Println("----------------- INIT DB CONNECTION ----------------")
 	dsn := "root:@tcp(localhost:3306)/project_management?charset=utf8&parseTime=True"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -19,6 +19,7 @@ func ConnectDB() {
 	}
 
 	DB = db
+	return db
 }
 
 // func ConnectDB() (*gorm.DB, error) {

@@ -18,7 +18,7 @@ func SaveSession(s SessionModel) {
 	s.SaveData()
 }
 
-func (m SessionModel) findBySessionid() []SessionModel {
+func (m SessionModel) FindBySessionid() []SessionModel {
 	type MS SessionModel
 	var data []SessionModel
 	DB.Where(MS{Id: m.Id}).Find(&data)

@@ -6,7 +6,9 @@ import (
 	"strings"
 
 	"github.com/dandirahmawan/menej_api_go/constanta"
+	"github.com/dandirahmawan/menej_api_go/model"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // var UrlNoAauth [1]
@@ -29,7 +31,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-func AuthMiddleware() gin.HandlerFunc {
+func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		/*get data heaeder*/
 		userid := c.Request.Header.Get("userid")
@@ -49,7 +51,15 @@ func AuthMiddleware() gin.HandlerFunc {
 
 			/*validate token or sessionid*/
 			sessionid := c.Request.Header.Get("sessionid")
-			fmt.Println("sessionid is ", sessionid)
+			var m model.SessionModel
+			m.Id = sessionid
+			data := m.FindBySessionid()
+			if len(data) == 0 {
+				c.IndentedJSON(http.StatusUnauthorized, "Session is expired")
+				c.Abort()
+				return
+			}
+			// fmt.Println("sessionid is ", sessionid)
 		}
 
 		c.Next()

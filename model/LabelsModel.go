@@ -19,8 +19,18 @@ func (m LabelsModel) Save() {
 	DB.Save(m)
 }
 
+func (m LabelsModel) Delete() {
+	DB.Delete(&LabelsModel{ProjectId: m.ProjectId, Label: m.Label})
+}
+
 func FindLabelsByProjectId(projectId string) []LabelsModel {
 	var data []LabelsModel
 	DB.Where(&LabelsModel{ProjectId: projectId}).Find(&data)
+	return data
+}
+
+func FindLabelByIdAndLabel(projectId string, label string) []LabelsModel {
+	var data []LabelsModel
+	DB.Where(&LabelsModel{ProjectId: projectId, Label: label}).Find(&data)
 	return data
 }

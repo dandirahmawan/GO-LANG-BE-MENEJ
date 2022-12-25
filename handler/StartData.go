@@ -9,5 +9,9 @@ import (
 
 func GetStartData(ctx *gin.Context) {
 	data := services.GetStartData(ctx)
-	ctx.IndentedJSON(http.StatusOK, data)
+	if data.Email == "" {
+		ctx.IndentedJSON(http.StatusUnauthorized, data)
+	} else {
+		ctx.IndentedJSON(http.StatusOK, data)
+	}
 }

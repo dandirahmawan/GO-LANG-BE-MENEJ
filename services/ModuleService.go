@@ -77,7 +77,6 @@ func GetDataModuleDetail(id string, userid string) interface{} {
 	resp.AssignedModules = dataAssigned
 	resp.DocumentFile = dataDocFile
 	resp.DataSection = dataSection
-	fmt.Println(resp)
 	return resp
 }
 
@@ -111,7 +110,7 @@ func SaveModule(ctx *gin.Context) interface{} {
 		data = mod.FindById()
 	}
 
-	fmt.Println(data)
+	// fmt.Println(data)
 	data.ModulId = mId
 	data.ModulName = moduleInput.ModuleName
 	data.ProjectId = moduleInput.ProjectId

@@ -68,7 +68,7 @@ func (m ModulModel) Update() ModulModel {
 
 	DB.Raw(query).Scan(&m)
 	// DB.Where(ModulModel{ModulId: m.ModulId}).Updates(ModulModel{ModulName: m.ModulName, Description: "", ModulStatus: m.ModulStatus, SectionId: m.SectionId})
-	fmt.Println(m)
+	// fmt.Println(m)
 	return m
 }
 
