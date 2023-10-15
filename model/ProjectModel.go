@@ -30,6 +30,12 @@ func FindAllProject() []ProjectModel {
 	return data
 }
 
+func (p ProjectModel) FindByProjectName(name string) ProjectModel {
+	var data ProjectModel
+	DB.Where("project_name", name).Find(&data)
+	return data
+}
+
 func (m ProjectModel) Save() {
 	DB.Create(m)
 }

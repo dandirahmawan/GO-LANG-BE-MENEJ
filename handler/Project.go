@@ -31,5 +31,6 @@ func PostProject(ctx *gin.Context) {
 	var input input.InputProject
 	ctx.BindJSON(&input)
 	fmt.Println(input)
-	services.SaveProject(input, dataSession.AccountId)
+	data := services.SaveProject(input, dataSession.AccountId)
+	ctx.IndentedJSON(200, data.ProjectId)
 }
