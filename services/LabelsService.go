@@ -34,6 +34,12 @@ func DeleteLabel(input input.LabelDelete) interface{} {
 		dataLabel.ProjectId = input.ProjectId
 		dataLabel.Label = input.Label
 		dataLabel.Delete()
+
+		var LabelModule model.LabelModule
+		LabelModule.ProjectId = input.ProjectId
+		LabelModule.Label = input.Label
+		LabelModule.DeleteByProjectIdAndLabel()
+
 		return response_base.ResponseMsg(true, "Delete label successfully")
 	}
 }

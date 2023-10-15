@@ -29,6 +29,12 @@ func FindLabelsByProjectId(projectId string) []LabelsModel {
 	return data
 }
 
+func FindLabelsByModuleId(projectId string) []LabelsModel {
+	var data []LabelsModel
+	DB.Where(&LabelsModel{ProjectId: projectId}).Find(&data)
+	return data
+}
+
 func FindLabelByIdAndLabel(projectId string, label string) []LabelsModel {
 	var data []LabelsModel
 	DB.Where(&LabelsModel{ProjectId: projectId, Label: label}).Find(&data)

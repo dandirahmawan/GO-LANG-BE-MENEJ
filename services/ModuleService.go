@@ -183,7 +183,8 @@ func setDataAssigned(assigned string, module model.ModulModel) {
 
 func setDataLabel(labelModule string, module model.ModulModel) {
 	var arrLabel []model.LabelModule
-	json.Unmarshal([]byte(labelModule), &arrLabel)
+	json.Unmarshal([]byte(labelModule), &arrLabel) /*convert string to json object*/
+
 	if len(arrLabel) > 0 {
 		/*delete old data*/
 		model.DeleteLabelModuleByModuleId(module.ModulId)
@@ -193,6 +194,13 @@ func setDataLabel(labelModule string, module model.ModulModel) {
 			item.ModuleId = module.ModulId
 			item.ProjectId = module.ProjectId
 			item.Save()
+		}
+	} else {
+		dataLabelModule := model.FindLabelModuleByModuleId(module.ModulId)
+		/*jika user set label kosong, namun data sebelumnya tidak kosong
+		maka eksekusi perintah delete data label pada module atau task*/
+		if len(dataLabelModule) != 0 {
+			model.DeleteLabelModuleByModuleId(module.ModulId)
 		}
 	}
 }

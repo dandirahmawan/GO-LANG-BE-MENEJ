@@ -29,11 +29,6 @@ func GetDataSession(sessionid string) model.SessionModel {
 	if err != nil {
 		fmt.Println(err)
 	}
-	// defer func() {
-	// 	config.CloseConnection(DB)
-	// 	config.CloseConnection(exc)
-	// 	fmt.Println("close connection get data session")
-	// }()
 
 	return data
 }

@@ -25,9 +25,11 @@ func FindDataStart(sessionid string) StartData {
 		"join session ssn on ssn.account_id = usr.user_id \n" +
 		"where ssn.id = '" + sessionid + "'"
 
+	// fmt.Println(DB)
 	fmt.Println(SQL)
-
+	fmt.Println("----------------------------")
 	var data StartData
-	DB.Raw(SQL).Find(&data)
+	err := DB.Raw(SQL).Find(&data)
+	fmt.Println(err)
 	return data
 }
